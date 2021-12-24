@@ -185,8 +185,6 @@ class MainboardOperationsContainerAddButton extends StatelessWidget {
       child: ElevatedButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Data d = Data();
-            d.printPath();
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => AddRoute()));
           },
@@ -207,7 +205,6 @@ class MainboardOperationsContainerListButton extends StatelessWidget {
       child: ElevatedButton(
           child: Icon(Icons.menu),
           onPressed: () {
-            Data databasePath = Data();
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => ListRoute()));
           },
