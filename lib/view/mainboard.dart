@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -20,15 +22,17 @@ class MainboardRouteState extends State<MainboardRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.teal[900],
-        body: Column(
-          children: [
-            MainBoardStatisticContainer(),
-            MainboardOperationsContainer(),
-            BottomContainer(),
-            RatingContainer(),
-          ],
-        ));
+      backgroundColor: Colors.teal[900],
+      body: Column(
+        children: [
+          MainBoardStatisticContainer(),
+          MainboardOperationsContainer(),
+          BottomContainer(),
+          RatingContainer(),
+        ],
+      ),
+      resizeToAvoidBottomInset: false,
+    );
   }
 }
 
@@ -56,7 +60,21 @@ class _MainBoardStatisticContainerState
             Container(
               child: Row(
                 children: [
-                  MainboardStatisticContainerElement(100, "Items stored"),
+                  FutureBuilder<int>(
+                      future: DatabaseHelper.instance.getCount(),
+                      builder:
+                          (BuildContext context, AsyncSnapshot<int> snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(child: Text('Loading...'));
+                        } else if (snapshot.hasData) {
+                          return MainboardStatisticContainerElement(
+                              snapshot.data!.toDouble(), "Accounts");
+                        } else {
+                          return Center(
+                              child: MainboardStatisticContainerElement(
+                                  0, "Error!"));
+                        }
+                      }),
                   MainboardStatisticContainerElement(5.9, "GB saved"),
                   MainboardStatisticContainerElement(0, "times hacked"),
                 ],
@@ -103,33 +121,63 @@ class _MainboardStatisticContainerElementState
     extends State<MainboardStatisticContainerElement> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text(widget.amount.toString(),
-              style: GoogleFonts.rubik(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 26,
-              )),
-          Text(widget.desc,
-              style: GoogleFonts.rubik(
-                color: Colors.white,
-                fontWeight: FontWeight.w300,
-                fontSize: 16,
-              )),
-        ],
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-      ),
-      decoration: BoxDecoration(
-          color: Colors.teal[900],
-          borderRadius: BorderRadius.all(Radius.circular(5))),
-      height: 100,
-      width: 370 / 3,
-      alignment: Alignment.center,
-      margin: EdgeInsets.all(5),
-    );
+    if (widget.amount.toString().contains(".0")) {
+      return Container(
+        child: Column(
+          children: [
+            Text(widget.amount.toString().split(".")[0],
+                style: GoogleFonts.rubik(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 26,
+                )),
+            Text(widget.desc,
+                style: GoogleFonts.rubik(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 16,
+                )),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+        ),
+        decoration: BoxDecoration(
+            color: Colors.teal[900],
+            borderRadius: BorderRadius.all(Radius.circular(5))),
+        height: 100,
+        width: 370 / 3,
+        alignment: Alignment.center,
+        margin: EdgeInsets.all(5),
+      );
+    } else
+      // ignore: curly_braces_in_flow_control_structures
+      return Container(
+        child: Column(
+          children: [
+            Text(widget.amount.toString(),
+                style: GoogleFonts.rubik(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 26,
+                )),
+            Text(widget.desc,
+                style: GoogleFonts.rubik(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 16,
+                )),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+        ),
+        decoration: BoxDecoration(
+            color: Colors.teal[900],
+            borderRadius: BorderRadius.all(Radius.circular(5))),
+        height: 100,
+        width: 370 / 3,
+        alignment: Alignment.center,
+        margin: EdgeInsets.all(5),
+      );
   }
 }
 

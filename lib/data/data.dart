@@ -1,77 +1,89 @@
-import 'package:keymount_v2/model/item.dart';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'dart:core';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
-class ItemDatabase {
-  static final ItemDatabase instance = ItemDatabase._init();
+class Account {
+  final int? id;
+  final String title;
+  final String username;
+  final String password;
+
+  Account(
+      {this.id,
+      required this.title,
+      required this.username,
+      required this.password});
+
+  factory Account.fromMap(Map<String, dynamic> json) => Account(
+        id: json['id'],
+        title: json['title'],
+        username: json['username'],
+        password: json['password'],
+      );
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'username': username,
+      'password': password,
+    };
+  }
+}
+
+class DatabaseHelper {
+  DatabaseHelper._privateConstructor();
+  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
   static Database? _database;
-  ItemDatabase._init();
 
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDB('notes.db');
-    return _database!;
-  }
+  Future<Database> get database async => _database ??= await _initDatabase();
 
-  Future<Database> _initDB(String filePath) async {
-    final dbPath = await getDatabasesPath();
-    final path = dbPath + filePath;
-    return await openDatabase(path, version: 1, onCreate: _createDB);
-  }
-
-  Future _createDB(Database db, int version) async {
-    final idType = 'INT PRIMARY KEY AUTOINCREMENT';
-    final stringType = 'TEXT NOT NULL';
-    await db.execute('''
-    CREATE TABLE $tableItem(
-     ${ItemFields.id} $idType,
-     ${ItemFields.title} $stringType,
-     ${ItemFields.username} $stringType,
-     ${ItemFields.password} $stringType
-    ) ''');
-  }
-
-  Future<void> create(String title, String username, String password) async {
-    final String _title = title;
-    final String _username = username;
-    final String _password = password;
-
-    final db = await instance.database;
-    final id = await db.rawInsert(
-        'INSERT INTO $tableItem (${ItemFields.title}, ${ItemFields.username}, ${ItemFields.password}) VALUES ($_title,$_username,$password) ');
-
-    print("ID:");
-    print(id);
-  }
-
-  Future<List<Item>> read() async {
-    final db = await instance.database;
-    final result = await db.query(tableItem, orderBy: '${ItemFields.id} ASC');
-
-    return result.map((json) => Item.fromJson(json)).toList();
-  }
-
-  Future<int> update(Item item) async {
-    final db = await instance.database;
-    return db.update(
-      tableItem,
-      item.toJson(),
-      where: '${ItemFields.id}=?',
-      whereArgs: [item.id],
+  Future<Database> _initDatabase() async {
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, 'accounts.db');
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: _onCreate,
     );
   }
 
-  Future<int> delete(int id) async {
-    final db = await instance.database;
-    return db.delete(
-      tableItem,
-      where: '${ItemFields.id}=?',
-      whereArgs: [id],
-    );
+  Future _onCreate(Database db, int version) async {
+    await db.execute(''' CREATE TABLE accounts(
+      id INTEGER PRIMARY KEY,
+      title TEXT,
+      username TEXT,
+      password TEXT
+    )
+    ''');
   }
 
-  Future close() async {
-    final db = await instance.database;
-    db.close();
+  Future<List<Account>> getAccounts() async {
+    Database db = await instance.database;
+    var accounts = await db.query('accounts', orderBy: 'name');
+    List<Account> accountList = accounts.isNotEmpty
+        ? accounts.map((c) => Account.fromMap(c)).toList()
+        : [];
+    return accountList;
+  }
+
+  Future<int> add(Account account) async {
+    Database db = await instance.database;
+    return await db.insert('accounts', account.toMap());
+  }
+
+  Future<int> remove(int id) async {
+    Database db = await instance.database;
+    return db.delete('accounts', where: 'id=?', whereArgs: [id]);
+  }
+
+  Future<int> getCount() async {
+    Database db = await instance.database;
+    var result = await db.query('accounts');
+    int count = result.length;
+    return count;
   }
 }
