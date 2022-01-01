@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
 
 import 'dart:convert';
 
@@ -61,22 +61,20 @@ class _MainBoardStatisticContainerState
               child: Row(
                 children: [
                   FutureBuilder<int>(
-                      future: DatabaseHelper.instance.getCount(),
+                      future: DatabaseHelper.instance.getAccountCount(),
                       builder:
                           (BuildContext context, AsyncSnapshot<int> snapshot) {
                         if (!snapshot.hasData) {
                           return Center(child: Text('Loading...'));
                         } else if (snapshot.hasData) {
                           return MainboardStatisticContainerElement(
-                              snapshot.data!.toDouble(), "Accounts");
+                              snapshot.data!, "Accounts");
                         } else {
                           return Center(
                               child: MainboardStatisticContainerElement(
                                   0, "Error!"));
                         }
                       }),
-                  MainboardStatisticContainerElement(5.9, "GB saved"),
-                  MainboardStatisticContainerElement(0, "times hacked"),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -107,7 +105,7 @@ class _MainBoardStatisticContainerState
 }
 
 class MainboardStatisticContainerElement extends StatefulWidget {
-  double amount = 0;
+  int amount = 0;
   String desc = "";
 
   MainboardStatisticContainerElement(this.amount, this.desc);
@@ -200,7 +198,22 @@ class _MainboardOperationsContainerState
               child: Row(
                 children: [
                   MainboardOperationsContainerAddButton(),
-                  MainboardOperationsContainerListButton()
+                  Container(
+                    child: ElevatedButton(
+                        child: Icon(Icons.add),
+                        onPressed: () async {
+                          await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ListRoute()))
+                              .then((value) => setState(() {}));
+                        },
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.teal[600],
+                            fixedSize: Size(380 / 2, 180))),
+                    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    alignment: Alignment.center,
+                  )
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -222,11 +235,20 @@ class _MainboardOperationsContainerState
         height: MediaQuery.of(context).size.height * 0.25,
         width: MediaQuery.of(context).size.width);
   }
+
+  callback() => setState(() {});
 }
 
-class MainboardOperationsContainerAddButton extends StatelessWidget {
-  const MainboardOperationsContainerAddButton({Key? key}) : super(key: key);
+class MainboardOperationsContainerAddButton extends StatefulWidget {
+  const MainboardOperationsContainerAddButton();
 
+  @override
+  _MainboardOperationsContainerAddButtonState createState() =>
+      _MainboardOperationsContainerAddButtonState();
+}
+
+class _MainboardOperationsContainerAddButtonState
+    extends State<MainboardOperationsContainerAddButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -234,7 +256,9 @@ class MainboardOperationsContainerAddButton extends StatelessWidget {
           child: Icon(Icons.add),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => AddRoute()));
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => AddRoute()));
           },
           style: ElevatedButton.styleFrom(
               primary: Colors.teal[600], fixedSize: Size(380 / 2, 180))),
@@ -244,18 +268,23 @@ class MainboardOperationsContainerAddButton extends StatelessWidget {
   }
 }
 
-class MainboardOperationsContainerListButton extends StatelessWidget {
-  const MainboardOperationsContainerListButton({Key? key}) : super(key: key);
+class MainboardOperationsContainerListButton extends StatefulWidget {
+  Function()? function;
+  MainboardOperationsContainerListButton(function);
 
+  @override
+  _MainboardOperationsContainerListButtonState createState() =>
+      _MainboardOperationsContainerListButtonState();
+}
+
+class _MainboardOperationsContainerListButtonState
+    extends State<MainboardOperationsContainerListButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
       child: ElevatedButton(
           child: Icon(Icons.menu),
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ListRoute()));
-          },
+          onPressed: widget.function,
           style: ElevatedButton.styleFrom(
               primary: Colors.teal[600], fixedSize: Size(380 / 2, 180))),
       margin: EdgeInsets.fromLTRB(5, 0, 5, 0),

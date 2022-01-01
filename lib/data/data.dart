@@ -34,6 +34,27 @@ class Account {
   }
 }
 
+class Count {
+  final int? id;
+  int value;
+  Count({
+    this.id,
+    required this.value,
+  });
+
+  factory Count.fromMap(Map<String, dynamic> json) => Count(
+        id: json['id'],
+        value: json['clicks'],
+      );
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'value': value,
+    };
+  }
+}
+
 class DatabaseHelper {
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -57,13 +78,14 @@ class DatabaseHelper {
       title TEXT,
       username TEXT,
       password TEXT
-    )
+    );
+    
     ''');
   }
 
   Future<List<Account>> getAccounts() async {
     Database db = await instance.database;
-    var accounts = await db.query('accounts', orderBy: 'name');
+    var accounts = await db.query('accounts', orderBy: 'username');
     List<Account> accountList = accounts.isNotEmpty
         ? accounts.map((c) => Account.fromMap(c)).toList()
         : [];
@@ -80,7 +102,13 @@ class DatabaseHelper {
     return db.delete('accounts', where: 'id=?', whereArgs: [id]);
   }
 
-  Future<int> getCount() async {
+  Future<int> update(Account account) async {
+    Database db = await instance.database;
+    return await db.update('accounts', account.toMap(),
+        where: "id = ?", whereArgs: [account.id]);
+  }
+
+  Future<int> getAccountCount() async {
     Database db = await instance.database;
     var result = await db.query('accounts');
     int count = result.length;

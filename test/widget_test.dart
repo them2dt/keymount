@@ -1,30 +1,108 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// ignore_for_file: prefer_const_constructors_in_immutables, unnecessary_new, prefer_const_constructors, duplicate_ignore
 
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 
-import 'package:keymount_v2/main.dart';
+void main() => runApp(new MyApp());
 
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      title: 'Flutter Demo',
+      theme: new ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: new MyHomePage(),
+    );
+  }
+}
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+EdgeInsets globalMargin =
+    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0);
+TextStyle textStyle = const TextStyle(
+  fontSize: 100.0,
+  color: Colors.black,
+);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+class _MyHomePageState extends State<MyHomePage> {
+  int number = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('SO Help'),
+      ),
+      body: new Column(
+        children: <Widget>[
+          new Text(
+            number.toString(),
+            style: textStyle,
+          ),
+          new GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            children: <Widget>[
+              new InkResponse(
+                child: new Container(
+                    margin: globalMargin,
+                    color: Colors.green,
+                    child: new Center(
+                      child: new Text(
+                        "+",
+                        style: textStyle,
+                      ),
+                    )),
+                onTap: () {
+                  setState(() {
+                    number++;
+                  });
+                },
+              ),
+              new Sub(onTap: () {
+                setState(() {
+                  number--;
+                });
+              }),
+            ],
+          ),
+        ],
+      ),
+      floatingActionButton: new FloatingActionButton(
+        onPressed: () {
+          setState(() {});
+        },
+        child: new Icon(Icons.update),
+      ),
+    );
+  }
+}
+
+class Sub extends StatelessWidget {
+  Function onTap;
+  Sub({this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    // ignore: unnecessary_new
+    return new InkResponse(
+      child: new Container(
+        margin: globalMargin,
+        color: Colors.red,
+        child: new Center(
+          child: new Text(
+            "-",
+            style: textStyle,
+          ),
+        ),
+      ),
+      onTap: onTap,
+    );
+  }
 }
