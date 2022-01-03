@@ -23,7 +23,7 @@ class _ListRouteState extends State<ListRoute> {
       appBar: AppBar(
         title: Text(clipboardText,
             style:
-                GoogleFonts.rubik(fontSize: 20, fontWeight: FontWeight.w800)),
+                GoogleFonts.rubik(fontSize: 20, fontWeight: FontWeight.w600)),
         backgroundColor: Colors.teal[800],
         centerTitle: true,
         shape: RoundedRectangleBorder(
@@ -39,9 +39,41 @@ class _ListRouteState extends State<ListRoute> {
             builder:
                 (BuildContext context, AsyncSnapshot<List<Account>> snapshot) {
               if (!snapshot.hasData) {
-                return Center(child: Text('Loading...'));
+                return Center(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                      Image(
+                          image: AssetImage('assets/images/empty.png'),
+                          width: 200,
+                          height: 200),
+                      Text('patience is the key...',
+                          style: GoogleFonts.rubik(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600))
+                    ]));
               } else if (snapshot.data!.isEmpty) {
-                return Center(child: Text("No Items in List"));
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image(
+                          image: AssetImage('assets/images/empty.png'),
+                          width: 200,
+                          height: 200),
+                      Text(
+                        "Pretty empty here...",
+                        style: GoogleFonts.rubik(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600),
+                      )
+                    ],
+                  ),
+                );
               } else if (snapshot.hasData) {
                 return ListView(
                     children: snapshot.data!.map((account) {
@@ -56,14 +88,16 @@ class _ListRouteState extends State<ListRoute> {
                                   onPressed: () {
                                     print(account.id);
                                     Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => EditRoute(
-                                                  id: account.id!,
-                                                  title: account.title,
-                                                  username: account.username,
-                                                  password: account.password,
-                                                )));
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EditRoute(
+                                          id: account.id!,
+                                          title: account.title,
+                                          username: account.username,
+                                          password: account.password,
+                                        ),
+                                      ),
+                                    ).then(onGoBack);
                                   },
                                   child: Text(account.title,
                                       style: GoogleFonts.rubik(
@@ -177,5 +211,14 @@ class _ListRouteState extends State<ListRoute> {
             }),
       ),
     );
+  }
+
+  void refreshData() {
+    setState(() {});
+  }
+
+  onGoBack(dynamic value) {
+    refreshData();
+    setState(() {});
   }
 }

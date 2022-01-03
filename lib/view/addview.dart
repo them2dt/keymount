@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 import 'package:keymount_v2/data/data.dart';
 
 class AddRoute extends StatefulWidget {
@@ -14,6 +15,9 @@ class AddRoute extends StatefulWidget {
 class _AddRouteState extends State<AddRoute> {
   String status = "";
   Color statusColor = Colors.white;
+  double titleFontSize = 18;
+  double usernameFontSize = 18;
+  double passwordFontSize = 18;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -25,20 +29,173 @@ class _AddRouteState extends State<AddRoute> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            TextField(
-              decoration: InputDecoration(labelText: "title"),
-              controller: titleController,
-            ),
-            TextField(
-              decoration: InputDecoration(labelText: "username"),
-              controller: usernameController,
-            ),
-            TextField(
-              decoration: InputDecoration(labelText: "password"),
-              controller: passwordController,
-            ),
+            Container(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      autocorrect: false,
+                      style: GoogleFonts.rubik(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: titleFontSize,
+                      ),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintText: 'title',
+                        hintStyle: GoogleFonts.rubik(
+                            color: Colors.white10, fontWeight: FontWeight.w600),
+                        contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        isCollapsed: true,
+                      ),
+                      textAlign: TextAlign.center,
+                      controller: titleController,
+                      onTap: () {
+                        setState(() {
+                          titleFontSize = 30;
+                          usernameFontSize = 20;
+                          passwordFontSize = 20;
+                        });
+                      },
+                      onFieldSubmitted: (_) async {
+                        if (titleController.text.isNotEmpty &&
+                            usernameController.text.isNotEmpty &&
+                            passwordController.text.isNotEmpty) {
+                          setState(() {
+                            status = "Good job !";
+                            statusColor = Colors.green[300]!;
+                          });
+                          await DatabaseHelper.instance.add(Account(
+                            title: titleController.text,
+                            username: usernameController.text,
+                            password: passwordController.text,
+                          ));
+                          Navigator.pop(context);
+                        }
+                        if (titleController.text.isEmpty ||
+                            usernameController.text.isEmpty ||
+                            passwordController.text.isEmpty) {
+                          setState(() {
+                            status = "Dont leave anything empty";
+                            statusColor = Colors.orange[600]!;
+                          });
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      autocorrect: false,
+                      style: GoogleFonts.rubik(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: usernameFontSize,
+                      ),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintText: 'username',
+                        hintStyle: GoogleFonts.rubik(
+                            color: Colors.white10, fontWeight: FontWeight.w600),
+                        isCollapsed: true,
+                      ),
+                      textAlign: TextAlign.center,
+                      controller: usernameController,
+                      onTap: () {
+                        setState(() {
+                          titleFontSize = 20;
+                          usernameFontSize = 30;
+                          passwordFontSize = 20;
+                        });
+                      },
+                      onFieldSubmitted: (_) async {
+                        if (titleController.text.isNotEmpty &&
+                            usernameController.text.isNotEmpty &&
+                            passwordController.text.isNotEmpty) {
+                          setState(() {
+                            status = "Good job !";
+                            statusColor = Colors.green[300]!;
+                          });
+                          await DatabaseHelper.instance.add(Account(
+                            title: titleController.text,
+                            username: usernameController.text,
+                            password: passwordController.text,
+                          ));
+                          Navigator.pop(context);
+                        }
+                        if (titleController.text.isEmpty ||
+                            usernameController.text.isEmpty ||
+                            passwordController.text.isEmpty) {
+                          setState(() {
+                            status = "Dont leave anything empty";
+                            statusColor = Colors.orange[600]!;
+                          });
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      autocorrect: false,
+                      style: GoogleFonts.rubik(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: passwordFontSize,
+                      ),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintText: 'password',
+                        hintStyle: GoogleFonts.rubik(
+                            color: Colors.white10, fontWeight: FontWeight.w600),
+                        isCollapsed: true,
+                      ),
+                      textAlign: TextAlign.center,
+                      controller: passwordController,
+                      onTap: () {
+                        setState(() {
+                          titleFontSize = 20;
+                          usernameFontSize = 20;
+                          passwordFontSize = 30;
+                        });
+                      },
+                      onFieldSubmitted: (_) async {
+                        if (titleController.text.isNotEmpty &&
+                            usernameController.text.isNotEmpty &&
+                            passwordController.text.isNotEmpty) {
+                          setState(() {
+                            status = "Good job !";
+                            statusColor = Colors.green[300]!;
+                          });
+                          await DatabaseHelper.instance.add(Account(
+                            title: titleController.text,
+                            username: usernameController.text,
+                            password: passwordController.text,
+                          ));
+                          Navigator.pop(context);
+                        }
+                        if (titleController.text.isEmpty ||
+                            usernameController.text.isEmpty ||
+                            passwordController.text.isEmpty) {
+                          setState(() {
+                            status = "Dont leave anything empty";
+                            statusColor = Colors.orange[600]!;
+                          });
+                        }
+                      },
+                    )
+                  ],
+                ),
+                margin: EdgeInsets.all(20)),
             ElevatedButton(
-              child: Text("ADD"),
+              child: Text("ADD",
+                  style: GoogleFonts.rubik(
+                      color: Colors.white, fontWeight: FontWeight.w600)),
               onPressed: () async {
                 if (titleController.text.isNotEmpty &&
                     usernameController.text.isNotEmpty &&
@@ -59,7 +216,7 @@ class _AddRouteState extends State<AddRoute> {
                     passwordController.text.isEmpty) {
                   setState(() {
                     status = "Dont leave anything empty";
-                    statusColor = Colors.red[300]!;
+                    statusColor = Colors.orange[600]!;
                   });
                 }
               },
@@ -72,83 +229,5 @@ class _AddRouteState extends State<AddRoute> {
           ]),
       resizeToAvoidBottomInset: false,
     );
-  }
-}
-
-class TitleTextField extends StatefulWidget {
-  TextEditingController controller;
-  TitleTextField({required this.controller});
-
-  @override
-  _TitleTextFieldState createState() => _TitleTextFieldState();
-}
-
-class _TitleTextFieldState extends State<TitleTextField> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
-      alignment: Alignment.center,
-      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
-      child: TextField(
-        decoration: InputDecoration(),
-      ),
-    );
-  }
-}
-
-class UsernameTextField extends StatefulWidget {
-  TextEditingController controller;
-
-  UsernameTextField({required this.controller});
-
-  @override
-  _UsernameTextFieldState createState() => _UsernameTextFieldState();
-}
-
-class _UsernameTextFieldState extends State<UsernameTextField> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
-      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
-      child: TextField(
-        decoration: InputDecoration(),
-      ),
-    );
-  }
-}
-
-class PasswordTextField extends StatefulWidget {
-  TextEditingController controller;
-  PasswordTextField({required this.controller});
-
-  @override
-  _PasswordTextFieldState createState() => _PasswordTextFieldState();
-}
-
-class _PasswordTextFieldState extends State<PasswordTextField> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
-      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
-      child: TextField(
-        decoration: InputDecoration(),
-        onSubmitted: (String text) {},
-      ),
-    );
-  }
-}
-
-class SubmitButton extends StatefulWidget {
-  @override
-  _SubmitButtonState createState() => _SubmitButtonState();
-}
-
-class _SubmitButtonState extends State<SubmitButton> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
