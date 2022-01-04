@@ -1,13 +1,9 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:crypto_font_icons/crypto_font_icons.dart';
 import 'package:keymount_v2/data/data.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'addview.dart';
 import 'itemlist.dart';
 
@@ -19,6 +15,21 @@ class MainboardRoute extends StatefulWidget {
 }
 
 class MainboardRouteState extends State<MainboardRoute> {
+  int colorIndex = 0;
+  List<Color> randomColors = [
+    const Color(0xFFFF9494),
+    const Color(0xFFFDFF94),
+    const Color(0xFF94FF99),
+    const Color(0xFF94FFDB),
+    const Color(0xFF94B6FF),
+    const Color(0xFF9694FF),
+    const Color(0xFFB994FF),
+    const Color(0xFFC294FF),
+    const Color(0xFFFF94F6),
+    const Color(0xFFE694FF),
+    const Color(0xFFFF94F1),
+    const Color(0xFFFF94D6),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +41,7 @@ class MainboardRouteState extends State<MainboardRoute> {
               children: [
                 Text("Welcome!",
                     style: GoogleFonts.rubik(
-                      color: Colors.white,
+                      color: randomColors[0],
                       fontWeight: FontWeight.w600,
                       fontSize: 26,
                     )),
@@ -42,10 +53,18 @@ class MainboardRouteState extends State<MainboardRoute> {
                           builder: (BuildContext context,
                               AsyncSnapshot<int> snapshot) {
                             if (!snapshot.hasData) {
-                              return Center(child: Text('Loading...'));
+                              return Center(
+                                  child: Text('Loading...',
+                                      style: GoogleFonts.rubik(
+                                        color: randomColors[0],
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                      )));
                             } else if (snapshot.hasData) {
                               return MainboardStatisticContainerElement(
-                                  snapshot.data!, "Accounts");
+                                snapshot.data!,
+                                "Accounts",
+                              );
                             } else {
                               return Center(
                                   child: MainboardStatisticContainerElement(
@@ -87,7 +106,7 @@ class MainboardRouteState extends State<MainboardRoute> {
                       children: [
                         Container(
                           child: ElevatedButton(
-                              child: Icon(Icons.add),
+                              child: FaIcon(FontAwesomeIcons.plus, size: 50),
                               onPressed: () {
                                 Navigator.push(
                                     context,
@@ -103,7 +122,7 @@ class MainboardRouteState extends State<MainboardRoute> {
                         ),
                         Container(
                           child: ElevatedButton(
-                              child: Icon(Icons.menu),
+                              child: FaIcon(FontAwesomeIcons.stream, size: 50),
                               onPressed: navigateSecondPage,
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.teal[600],
@@ -249,12 +268,16 @@ class _BottomContainerState extends State<BottomContainer> {
                     onPressed: () {},
                     child: Row(
                       children: [
-                        Text(" Donations ",
+                        FaIcon(
+                          FontAwesomeIcons.toolbox,
+                          size: 50,
+                        ),
+                        /*Text("Password Lab",
                             style: GoogleFonts.rubik(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
                               fontSize: 26,
-                            )),
+                            )),*/
                       ],
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -314,12 +337,17 @@ class _RatingContainerState extends State<RatingContainer> {
               children: [
                 ElevatedButton(
                     onPressed: () {},
-                    child: Text("How did we so far?",
+                    child: FaIcon(
+                      FontAwesomeIcons.magic,
+                      size: 50,
+                    ),
+
+                    /*Text("How did we so far?",
                         style: GoogleFonts.rubik(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                           fontSize: 26,
-                        )),
+                        )),*/
                     style: ElevatedButton.styleFrom(
                         primary: Colors.teal[600],
                         fixedSize: Size(390,
