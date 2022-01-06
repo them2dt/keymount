@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:keymount_v2/view/hash_generator.dart';
 import 'package:keymount_v2/view/password_validator.dart';
 
 class ToolRoute extends StatefulWidget {
@@ -63,8 +64,7 @@ class _ToolRouteState extends State<ToolRoute> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          PasswordValidatorRoute()));
+                      builder: (BuildContext context) => HashGeneratorRoute()));
             },
           )
         ],
