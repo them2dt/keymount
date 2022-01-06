@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:keymount_v2/data/data.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:keymount_v2/view/toolview.dart';
 import 'addview.dart';
 import 'itemlist.dart';
 
@@ -191,7 +192,14 @@ class MainboardRouteState extends State<MainboardRoute> {
                   child: Row(
                     children: [
                       ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ToolRoute(),
+                                ));
+                          },
                           child: Row(
                             children: [
                               FaIcon(
