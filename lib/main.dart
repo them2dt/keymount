@@ -1,21 +1,29 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:keymount_v2/view/start.dart';
-import 'package:rate_my_app/rate_my_app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  RateMyApp rateMyApp = RateMyApp(
-    preferencesPrefix: 'rateMyApp_',
-    minDays: 0, // Show rate popup on first day of install.
-    minLaunches:
-        1, // Show rate popup after 5 launches of app after minDays is passed.
-  );
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  int nbTimesLaunched = (prefs.getInt('nbTimesLaunched') ?? 0) + 1;
+  bool isReviewed = (prefs.getBool('isReviewed') ?? false);
+  await prefs.setInt('nbTimesLaunched', nbTimesLaunched);
+
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+enum Availability { loading, available, unavailable }
+
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

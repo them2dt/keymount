@@ -7,17 +7,38 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:keymount_v2/data/data.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:keymount_v2/view/toolview.dart';
+import 'package:in_app_review/in_app_review.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'addview.dart';
 import 'itemlist.dart';
 
 class MainboardRoute extends StatefulWidget {
-  const MainboardRoute({Key? key}) : super(key: key);
+  MainboardRoute();
 
   @override
   MainboardRouteState createState() => MainboardRouteState();
 }
 
 class MainboardRouteState extends State<MainboardRoute> {
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      final InAppReview inAppReview = InAppReview.instance;
+      //count launch
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int nbTimesLaunched = prefs.getInt('nbTimesLaunched') ?? 1;
+      bool isReviewed = prefs.getBool('isReviewed') ?? false;
+      if (nbTimesLaunched % 7 == 0 && !isReviewed) {
+        // show dialogue
+        if (await inAppReview.isAvailable()) {
+          inAppReview.requestReview();
+          await prefs.setBool('isReviewed', true);
+        }
+      }
+    });
+  }
+
   int colorIndex = 3;
   List<Color> randomColors = [
     const Color(0xFFFFFFFF),
@@ -35,6 +56,7 @@ class MainboardRouteState extends State<MainboardRoute> {
     const Color(0xFFFFD000),
     const Color(0xFF00C3FF),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,6 +168,8 @@ class MainboardRouteState extends State<MainboardRoute> {
                                             AddRoute()));
                               },
                               style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  shadowColor: Colors.transparent,
                                   primary: Colors.teal[600],
                                   fixedSize: Size(380 / 2, 180))),
                           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -160,6 +184,8 @@ class MainboardRouteState extends State<MainboardRoute> {
                               ),
                               onPressed: navigateSecondPage,
                               style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  shadowColor: Colors.transparent,
                                   primary: Colors.teal[600],
                                   fixedSize: Size(380 / 2, 180))),
                           margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -218,6 +244,8 @@ class MainboardRouteState extends State<MainboardRoute> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                           ),
                           style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              shadowColor: Colors.transparent,
                               primary: Colors.teal[600],
                               fixedSize: Size(
                                   390,
@@ -270,6 +298,8 @@ class MainboardRouteState extends State<MainboardRoute> {
                           fontSize: 26,
                         )),*/
                           style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              shadowColor: Colors.transparent,
                               primary: Colors.teal[600],
                               fixedSize: Size(
                                   390,
