@@ -50,7 +50,7 @@ class StartTextContainerState extends State<StartTextContainer> {
                   color: Colors.white,
                   fontSize: 30,
                   fontWeight: FontWeight.w600)),
-          Text("M2DT Apps", style: TextStyle(color: Colors.teal[100])),
+          Text("maruthan.ch", style: TextStyle(color: Colors.teal[100])),
         ],
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
