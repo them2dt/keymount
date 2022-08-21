@@ -1,16 +1,14 @@
-# keymount_v2
+# keymount
+A password vault with useful built-in tools.
 
-A new Flutter project.
+Store your account information locally without a third-party-service having your data. With our extra features you can generate & validate safe passwords.
+The app is available in the Google Play Store.
 
-## Getting Started
+## Features
+- password generator (SHA256-encryption)
+- password validator with 5 different security levels
+- ui customization (beta)
 
-This project is a starting point for a Flutter application.
+[Get it on Google Play Store!](https://play.google.com/store/apps/details?id=app.emptea.keymount&hl=de)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Kindly note that Keymount is still in developement and bugs and errors can be reported to this [E-Mail](mailto:info@emptea.xyz)
