@@ -14,4 +14,4 @@ The app is available in the Google Play Store.
 
 Kindly note that Keymount is still in developement and bugs and errors can be reported to this [E-Mail](mailto:info@emptea.xyz)
 
-Developed by Maruthan Thanabalasingam. Published through [Emptea](https://github.com/emptea-on-github).
+Developed by Maruthan Thanabalasingam. Published through alias [Emptea](https://github.com/emptea-on-github).
